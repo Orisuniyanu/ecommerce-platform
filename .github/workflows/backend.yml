@@ -1,0 +1,35 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - 'api/**'
+  pull_request:
+    paths:
+      - 'api/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm test
+      - name: Build Docker Image
+        run: docker build -t orisuniyanu/ecommerce-api ./api
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+
