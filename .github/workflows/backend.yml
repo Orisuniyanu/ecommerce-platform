@@ -14,16 +14,15 @@ jobs:
     defaults:
       run:
         working-directory: api
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm ci
-      - run: npm test
-      - name: Build Docker Image
-        run: docker build -t orisuniyanu/ecommerce-api ./api
+
       - name: Cache Node Modules
         uses: actions/cache@v3
         with:
@@ -32,4 +31,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - run: npm ci
+      - run: npm test
 
+      - name: Build Docker Image
+        run: docker build -t orisuniyanu/ecommerce-api .
