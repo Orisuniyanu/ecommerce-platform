@@ -16,14 +16,18 @@ jobs:
         working-directory: webapp
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
       - run: npm ci
       - run: npm run build
+
       - name: Build Docker Image
-        run: docker build -t myuser/ecommerce-webapp ./webapp
+        run: docker build -t myuser/ecommerce-webapp .
+
       - name: Cache Node Modules
         uses: actions/cache@v3
         with:
@@ -31,5 +35,3 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
-
