@@ -3,6 +3,6 @@ WORKDIR /app
 COPY . .
 RUN npm install && npm run build
 
-# Image to pull and runs
+# Image to pull and run
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
