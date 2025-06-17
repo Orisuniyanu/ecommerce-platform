@@ -43,12 +43,11 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           script: |
             docker pull orisuniyanu/ecommerce-webapp
             docker stop ecommerce-webapp || true
             docker rm ecommerce-webapp || true
             docker run -d -p 80:80 --name ecommerce-webapp orisuniyanu/ecommerce-webapp
-
