@@ -10,7 +10,7 @@ ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
 RUN npm install && npm run build
 
-## Stage 2 - Serve with Nginx
+# Stage 2 - Serve with Nginx
 FROM nginx:alpine
 
 # Copy built React files to Nginx HTML folder
