@@ -42,9 +42,12 @@
     "@babel/preset-react": "^7.27.1",
     "babel-jest": "^30.0.0"
   },
-    "jest": {
+  "jest": {
     "transform": {
       "^.+\\.(js|jsx)$": "babel-jest"
-    }
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios)/"
+    ]
   }
 }
