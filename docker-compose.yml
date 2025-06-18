@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+    container_name: ecommerce-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - api-data:/app/data   # This will persist files written to /app/data
+    networks:
+      - ecommerce-net
+    environment:
+      - NODE_ENV=production
+
+  webapp:
+    build:
+      context: ./webapp
+      args:
+        REACT_APP_API_URL: http://api:3000
+    container_name: ecommerce-webapp
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - ecommerce-net
+
+volumes:
+  api-data:  # named volume
+
+networks:
+  ecommerce-net:
