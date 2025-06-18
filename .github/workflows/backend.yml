@@ -52,8 +52,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}  # e.g., ec2-user or ubuntu
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          username: ${{ secrets.AWS_ACCESS_KEY_ID }} 
+          key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           script: |
             docker pull orisuniyanu/ecommerce-api
             docker stop ecommerce-api || true
