@@ -61,14 +61,18 @@ jobs:
           key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           script: |
             cd ~
+            
             if [ ! -d "cloud" ]; then
               git clone https://github.com/Orisuniyanu/ecommerce-platform.git cloud
-            else
-              cd cloud
-              git pull origin main
             fi
+
             cd cloud
-            docker pull orisuniyanu/ecommerce-api
-            docker pull orisuniyanu/ecommerce-webapp
-            docker compose -f docker-compose.yml down
-            docker compose -f docker-compose.yml up -d
+            git pull origin main
+
+            docker pull orisuniyanu/api
+            docker pull orisuniyanu/webapp
+
+            docker compose down
+            docker compose build
+            docker compose up -d
+
