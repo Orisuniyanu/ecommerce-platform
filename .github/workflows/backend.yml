@@ -9,16 +9,18 @@ on:
       - 'api/**'
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: api
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -31,24 +33,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - run: npm ci
-      - run: npm test
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Build Docker Image
+      - name: Run tests
+        run: npm test
+
+      - name: Build Docker image
         run: docker build -t orisuniyanu/ecommerce-api .
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Push Docker Image
+      - name: Push Docker image
         run: docker push orisuniyanu/ecommerce-api
 
-      - name: Deploy to EC2
+      - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          username: ${{ secrets.EC2_USERNAME }}  # e.g., ec2-user or ubuntu
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             docker pull orisuniyanu/ecommerce-api
             docker stop ecommerce-api || true
